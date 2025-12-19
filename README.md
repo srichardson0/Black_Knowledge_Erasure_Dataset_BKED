@@ -103,7 +103,7 @@ Relationship between files:
 
 ### Summary of Methodology
 
-BKED utilizes a curated set of prompts across categories like black_art_artists and african_diaspora. Responses were captured from GPT-5, Gemini 2.5 Flash, and Claude Haiku 4.5.
+BKED utilizes a curated set of prompts across categories like black_art_artists and african_diaspora (with focus on 19th and 20th century histories). Responses were captured from GPT-5, Gemini 2.5 Flash, and Claude Haiku 4.5.
 
 **Annotation Process:**
 
