@@ -159,7 +159,7 @@ if __name__ == "__main__":
     ]
     
     # Option 1: Run ALL prompts
-    run_tests("data/prompt_master - Copy.csv", models_to_test)
+    run_tests("data/prompt_master.csv", models_to_test)
     
     # Option 2: Run SPECIFIC prompts by ID
     # run_tests("data/prompt_master - Copy.csv", models_to_test, prompt_ids=['P080'])
