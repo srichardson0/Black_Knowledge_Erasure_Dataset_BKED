@@ -8,7 +8,7 @@
 
 **Data collection procedure**
 1. Prompt preparation: Prompts were drafted and reviewed for clarity and topical coverage; each prompt includes a unique `prompt_id` and a topical `category` recorded in `data/prompt_master.csv`.
-2. Programmatic querying: The `src/collect_records.py` script drove model queries. For each model and prompt, the script sends the prompt (optionally with a short instruction) and receives a textual response. Each response is saved as a JSON record in `model_outputs/<model>/` containing at minimum: `timestamp`, `model`, `prompt_id`, `prompt`, `category`, `verification_source`, and `response`.
+2. Programmatic querying: The `src/collect_records.py` script drove model queries. For each model and prompt, the script sends the prompt (with instruction to respond in 1 - 2 sentences) and receives a textual response. Each response is saved as a JSON record in `model_outputs/<model>/` containing: `timestamp`, `model`, `prompt_id`, `prompt`, `category`, `verification_source`, and `response`.
 3. Archival: JSON files are named with `prompt_id` and timestamp (`YYYY-MM-DD_HH-MM-SS`) to allow traceability and reproducibility of model output at the time of collection.
 
 **Preprocessing and aggregation**
@@ -19,21 +19,21 @@
 **Annotation protocol (identifying hallucinations)**
 
 Annotation is a human-led, structured process used to identify, classify, and document hallucinations in model outputs. Key steps:
-1. Candidate extraction: Curators review `data/model_responses_raw.csv` and identify candidate outputs that appear to contain fabricated, misattributed, or otherwise incorrect claims. Candidate rows are copied or referenced into a working annotation table.
-2. Classification: Annotators assign an `error_type` from the controlled vocabulary:
+1. Hallucination extraction: `data/model_responses_raw.csv` is reviewed and outputs that appear to contain fabricated, misattributed, or otherwise incorrect claims are identified. These rows are copied into a working annotation table.
+2. Classification: An `error_type` is assigned from the controlled vocabulary:
    - `misattribution`, `erasure_by_omission`, `adjacent_error`, `invented_figure`, `temporal_error`, `geographical_error`, `factual_error`.
-3. Description: For each annotated record, annotators write an `error_description` that explains why the output is erroneous, with supporting citations where available.
-4. Verification: Annotators supply a `verification_source` (URL or citation) that was used to confirm or refute the claim. If no reliable verification source exists, annotators flag the record for further review.
+3. Description: For each annotated record, an `error_description` is written that explains why the output is erroneous.
+4. Verification: `verification_source` (URL or citation) is provided that was used to confirm or refute the claim. 
 5. Export: Curated and annotated hallucination records are stored in `data/model_hallucinations.csv` with the schema defined in `schema.json`.
 
 **Quality assurance and validation**
-- Schema validation: I validate exported CSVs against `schema.json` to ensure required fields and data types are present. A lightweight validation script was used to check `data/model_hallucinations.csv` 
+- Schema validation: Exported CSVs are validated against `schema.json` to ensure required fields and data types are present.
 - Controlled vocabularies: Use of the controlled `error_type` vocabulary and `category` normalization reduces categorical drift and aids downstream analysis.
 
 **Software, reproducibility, and environment**
 - Code: Collection and aggregation scripts are in the `src/` folder. `collect_records.py` handles API queries and saving JSON outputs; `append_records.py` aggregates into `data/model_responses_raw.csv`.
-- Environment: Recommended Python version is 3.10+; dependencies are listed in `requirements.txt` (notably `pandas`, `openai`, `google-genai`, `anthropic`).
-- Reproducibility: JSON archives in `model_outputs/` plus `prompt_master.csv` provide the provenance necessary to reproduce model calls. Where possible, include API parameters and model versions in the JSON records.
+- Environment: Recommended Python version is 3.10+; dependencies are listed in `requirements.txt`.
+- Reproducibility: JSON archives in `model_outputs/` plus `prompt_master.csv` provide the provenance necessary to reproduce model calls. 
 
 **Limitations**
 - API variation: Model behavior may change over time; archived JSONs capture responses at collection time but cannot account for downstream model updates.
